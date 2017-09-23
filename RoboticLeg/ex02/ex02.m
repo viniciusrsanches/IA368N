@@ -1,8 +1,7 @@
 clc; clear all
 pkg load symbolic
 syms alpha beta gamma real
-%output_precision(5);
-format short
+
 lb = 1; l1 = 1; l2 = 1; l3 = 1;
 
 % rotational matrices calculated in previous problem set

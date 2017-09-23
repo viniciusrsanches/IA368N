@@ -15,7 +15,7 @@ J_BF_inB = ...
 
 % what generalized velocity dq do you have to apply in a configuration q = [0;60°;-120°]
 % to lift the foot in vertical direction with v = [0;0;-1m/s];
-v = [0; 0; -1]
+v = [0; 0; -1];
 qi = [0; 60*(pi/180); -120*(pi/180)];
 
 % Determine the numerical value of the foot point jacobian for initial joint angles qi

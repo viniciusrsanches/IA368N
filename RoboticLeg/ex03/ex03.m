@@ -1,5 +1,5 @@
 clc; clear all;
-
+pkg load symbolic;
 syms alpha beta gamma real
 
 q = [alpha;beta;gamma];
@@ -11,17 +11,17 @@ r_BF_inB = [...
 
 
 % determine the foot point Jacobian J_BF_inB=d(r_BF_inB)/dq
-J_BF_inB = ...
+J_BF_inB = jacobian(r_BF_inB, q);
 
 % what generalized velocity dq do you have to apply in a configuration q = [0;60°;-120°]
 % to lift the foot in vertical direction with v = [0;0;-1m/s];
-v = [0; 0; -1];
-qi = [0; 60*(pi/180); -120*(pi/180)];
+v = [0; 0; -1]
+qi = [0; 60*(pi/180); -120*(pi/180)]
 
 % Determine the numerical value of the foot point jacobian for initial joint angles qi
-JBF = ...
+JBF = double(subs(J_BF_inB,[alpha beta gamma],qi'))
     
 % Determine the numerical value for dq
-dq = ...
+dq = inv(JBF)*v
 
 valid

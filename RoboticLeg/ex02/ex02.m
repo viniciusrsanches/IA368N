@@ -1,5 +1,5 @@
-clc; clear all
-pkg load symbolic
+clc; clear all;
+pkg load symbolic;
 syms alpha beta gamma real
 
 lb = 1; l1 = 1; l2 = 1; l3 = 1;

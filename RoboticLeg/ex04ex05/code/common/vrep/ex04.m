@@ -51,9 +51,7 @@ qi = q0;
 error_valid = 1;
 
 while error_valid >= 1E-8
-JBF = J_BF_inB(qi(1),qi(2),qi(3));
-pseudo_inverted_jacobian =  inv(JBF'*JBF)*JBF';
-qGoal = qi + pseudo_inverted_jacobian*(rGoal-r_BF_inB(qi(1),qi(2),qi(3)));
+qGoal = qi + pinv(J_BF_inB(qi(1),qi(2),qi(3)))*(rGoal-r_BF_inB(qi(1),qi(2),qi(3)));
 qi = qGoal;
 valid
 endwhile

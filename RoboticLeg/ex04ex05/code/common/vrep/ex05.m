@@ -90,13 +90,10 @@ simulation_setStepped(connection,true);
         % controller:
         % step 1: create a simple p controller to determine the desired foot
         % point velocity
-        JBF = J_BF_inB(q(1),q(2),q(3));
-        pseudo_inverted_jacobian =  inv(JBF'*JBF)*JBF';
         v = drGoal(t);
         % step 2: perform inverse differential kinematics to calculate the
         % gneralized velocities
-        
-        dq = pseudo_inverted_jacobian*v;
+        dq = pinv(J_BF_inB(q(1),q(2),q(3)))*v;
         %updateVels(vrep,connection.clientID,dq)
         updatePos(vrep,connection.clientID,q)
     end

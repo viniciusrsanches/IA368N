@@ -48,6 +48,7 @@ simulation_setStepped(connection,true);
     updatePos(vrep,connection.clientID,q0)
    % pause(1.0)
 
+
     dq0 = zeros(3,1);
     rCenter = r_BF_inB(q0(1),q0(2),q0(3));
     radius = 0.5;
@@ -55,6 +56,18 @@ simulation_setStepped(connection,true);
     rGoal = @(t) rCenter + radius*[sin(2*pi*f*t),0,cos(2*pi*f*t)]';
     drGoal = @(t) 2*pi*f*radius*[cos(2*pi*f*t),0,-sin(2*pi*f*t)]';
     
+    qi = q0;
+    error_valid = 1;
+
+    while error_valid >= 1E-8
+      JBF = J_BF_inB(qi(1),qi(2),qi(3));
+      pseudo_inverted_jacobian =  inv(JBF'*JBF)*JBF';
+      qGoal = qi + pseudo_inverted_jacobian*(rGoal(0)-r_BF_inB(qi(1),qi(2),qi(3)));
+      qi = qGoal;
+      valid2
+    endwhile
+    updatePos(vrep,connection.clientID,qGoal)
+    q = qGoal;
     % define here the time resolution
     deltaT = dt;%0.01;
     timeArr = 0:deltaT:1/f;
@@ -64,7 +77,7 @@ simulation_setStepped(connection,true);
     rArr = zeros(3,length(timeArr));
     rGoalArr = zeros(3,length(timeArr));
     
-    q = q0;
+    %q = q0;
     dq = dq0;
     for i=1:length(timeArr)
         t = timeArr(i);
@@ -77,11 +90,15 @@ simulation_setStepped(connection,true);
         % controller:
         % step 1: create a simple p controller to determine the desired foot
         % point velocity
-        v = ...;
+        JBF = J_BF_inB(q(1),q(2),q(3));
+        pseudo_inverted_jacobian =  inv(JBF'*JBF)*JBF';
+        v = drGoal(t);
         % step 2: perform inverse differential kinematics to calculate the
         % gneralized velocities
-        dq = ...;
         
+        dq = pseudo_inverted_jacobian*v;
+        %updateVels(vrep,connection.clientID,dq)
+        updatePos(vrep,connection.clientID,q)
     end
 
 

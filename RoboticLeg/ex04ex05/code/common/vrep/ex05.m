@@ -79,6 +79,7 @@ simulation_setStepped(connection,true);
     
     %q = q0;
     dq = dq0;
+    updateVels(vrep,connection.clientID,dq)
     for i=1:length(timeArr)
         t = timeArr(i);
         % data logging, don't change this!
@@ -94,8 +95,9 @@ simulation_setStepped(connection,true);
         % step 2: perform inverse differential kinematics to calculate the
         % gneralized velocities
         dq = pinv(J_BF_inB(q(1),q(2),q(3)))*v;
-        %updateVels(vrep,connection.clientID,dq)
+        
         updatePos(vrep,connection.clientID,q)
+        %updateVels(vrep,connection.clientID,dq)
     end
 
 

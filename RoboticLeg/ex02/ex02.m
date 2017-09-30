@@ -16,14 +16,14 @@ r_23_in2 = [0; 0; -l2];
 r_3F_in3 = [0; 0; -l3];
 
 % write down the homogeneous transformation matrices
-H_B1 = R_B1*r_12_in1;
-H_12 = R_B1*R_12*r_23_in2;
-H_23 = R_B1*R_12*R_23*r_3F_in3;
-
+H_B1 = [[R_B1,r_B1_inB]; [0 0 0 1]];
+H_12 = [[R_12,r_12_in1]; [0 0 0 1]];
+H_23 = [[R_23,r_23_in2]; [0 0 0 1]];
+ 
 % create the cumulative transformation matrix
-H_B3 = H_B1+H_12+H_23; 
+H_B3 = H_B1*H_12*H_23; 
 
 % find the foot point position vector
-r_BF_inB = r_B1_inB + H_B3;
+r_BF_inB = H_B3*r_3F_in3;
      
 valid

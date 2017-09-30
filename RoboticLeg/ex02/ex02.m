@@ -24,6 +24,6 @@ H_23 = [[R_23,r_23_in2]; [0 0 0 1]];
 H_B3 = H_B1*H_12*H_23; 
 
 % find the foot point position vector
-r_BF_inB = H_B3*[r_3F_in3;1];
+r_BF_inB = H_B3(1:3,:)*[r_3F_in3;1];
      
 valid

@@ -4,7 +4,10 @@ function [ LeftWheelVelocity, RightWheelVelocity ] = calculateWheelSpeeds( vu, o
 wheelRadius = parameters.wheelRadius;
 halfWheelbase = parameters.interWheelDistance/2;
 
-LeftWheelVelocity = ###;
-RightWheelVelocity = ###;
+M = [parameters.wheelRadius/2 parameters.wheelRadius/2; parameters.wheelRadius/(parameters.interWheelDistance) -parameters.wheelRadius/(parameters.interWheelDistance)];
+v = [vu; omega];
+wheels_velocity = M \ v;
+LeftWheelVelocity = wheels_velocity(2);
+RightWheelVelocity = wheels_velocity(1);
 
 end

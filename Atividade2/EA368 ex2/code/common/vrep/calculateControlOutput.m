@@ -25,7 +25,7 @@ alpha = normalizeAngle(alpha);
 % parameters.useConstantSpeed: Turn on constant speed option
 % parameters.constantSpeed: The speed used when constant speed option is on
 
-vu =###; % [m/s]
-omega = ### % [rad/s]
+vu = parameters.Krho* rho; % [m/s]
+omega = (parameters.Kalpha*alpha + parameters.Kbeta * normalizeAngle((-thetag -alpha)));% [rad/s]
 end
 

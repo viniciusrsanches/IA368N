@@ -91,7 +91,30 @@ parameters.angle_threshold = deg2rad(10);%0.4; % threshold orientation to goal
 R = parameters.wheelRadius;
 
 %% teleoperation program goes here
+%% CONTROL LOOP.
+EndCond = 0;
 
+while (~EndCond)
+    %% CONTROL STEP.
+    % Get pose and goalPose from vrep
+    [x, y, theta] = Pioneer_p3dx_getPose(connection);
+    [xg, yg, thetag] = Pioneer_p3dx_getTargetGhostPose(connection);
+    
+    % run control step
+    [ vu, omega ] = calculateControlOutput([x, y, theta], [xg, yg, thetag], parameters);
+
+    % Calculate wheel speeds
+    [LeftWheelVelocity, RightWheelVelocity ] = calculateWheelSpeeds(vu, omega, parameters);
+
+    % End condition
+    dtheta = abs(normalizeAngle(theta-thetag));
+
+    rho = sqrt((xg-x)^2+(yg-y)^2);  % pythagoras theorem, sqrt(dx^2 + dy^2)
+    EndCond = (rho < parameters.dist_threshold && dtheta < parameters.angle_threshold);     
+    
+    % SET ROBOT WHEEL SPEEDS.
+    Pioneer_p3dx_setWheelSpeeds(connection, LeftWheelVelocity, RightWheelVelocity);
+end
 
 %% Bring Pioneer_p3dx to standstill
 Pioneer_p3dx_setWheelSpeeds(connection, 0.0, 0.0);

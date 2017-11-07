@@ -26,6 +26,6 @@ alpha = normalizeAngle(alpha);
 % parameters.constantSpeed: The speed used when constant speed option is on
 
 vu = parameters.Krho* rho*cos(alpha); % [m/s]
-omega = -(parameters.Krho*sin(alpha)-parameters.Kalpha*alpha - parameters.Kbeta * normalizeAngle((-theta -alpha)))+(-parameters.Krho*sin(alpha));% [rad/s]
+omega = parameters.Kalpha*alpha + parameters.Kbeta * (normalizeAngle((-(theta)-alpha)+thetag));% [rad/s]
 end
 

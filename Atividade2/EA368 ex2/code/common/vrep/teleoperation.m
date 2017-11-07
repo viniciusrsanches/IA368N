@@ -105,27 +105,42 @@ while (~EndCond)
     %[ vu, omega ] = calculateControlOutput([x, y, theta], [xg, yg, thetag], parameters);
 
     key = kbhit(1);
-    if key == 'w'
+    if key == 'w' && vu < 0.25
       vu += 0.05;
-    elseif key == 's'
+    elseif key == 's' && vu > -0.25
       vu -= 0.05;
-    elseif key == 'a'
-      omega += 0.05;     
-    elseif key == 'd'
-      omega -= 0.05;
+    elseif key == 'a' && omega < 0.75
+%      if vu >= 0
+        omega += 0.05;     
+%      else
+%        omega -= 0.05;
+%      end
+    elseif key == 'd' && omega > -0.75
+%      if vu >= 0
+        omega -= 0.05;
+%      else
+%        omega += 0.05;
+%      end
     elseif isempty(key)
-      if vu > 0
-        vu -= 0.001;
-      elseif vu < 0
-        vu += 0.001;
-      end
+%      if vu > 0
+%        vu -= 0.001;
+%      elseif vu < 0
+%        vu += 0.001;
+%      end
       if omega > 0
-        omega -= 0.001;
+        omega -= 0.0025;
       elseif omega < 0
-        omega += 0.001;
+        omega += 0.0025;
       end
     end
-
+    
+    %Avoinding range operation overflow
+    if abs(vu) < 0.01
+      vu = 0;
+    end
+    if abs(omega) < 0.005
+      omega = 0;
+    end
     % Calculate wheel speeds
     [LeftWheelVelocity, RightWheelVelocity ] = calculateWheelSpeeds(vu, omega, parameters);
 

@@ -93,7 +93,8 @@ R = parameters.wheelRadius;
 %% teleoperation program goes here
 %% CONTROL LOOP.
 EndCond = 0;
-
+vu = 0;
+omega = 0;
 while (~EndCond)
     %% CONTROL STEP.
     % Get pose and goalPose from vrep
@@ -101,7 +102,29 @@ while (~EndCond)
     [xg, yg, thetag] = Pioneer_p3dx_getTargetGhostPose(connection);
     
     % run control step
-    [ vu, omega ] = calculateControlOutput([x, y, theta], [xg, yg, thetag], parameters);
+    %[ vu, omega ] = calculateControlOutput([x, y, theta], [xg, yg, thetag], parameters);
+
+    key = kbhit(1);
+    if key == 'w'
+      vu += 0.05;
+    elseif key == 's'
+      vu -= 0.05;
+    elseif key == 'a'
+      omega += 0.05;     
+    elseif key == 'd'
+      omega -= 0.05;
+    elseif isempty(key)
+      if vu > 0
+        vu -= 0.001;
+      elseif vu < 0
+        vu += 0.001;
+      end
+      if omega > 0
+        omega -= 0.001;
+      elseif omega < 0
+        omega += 0.001;
+      end
+    end
 
     % Calculate wheel speeds
     [LeftWheelVelocity, RightWheelVelocity ] = calculateWheelSpeeds(vu, omega, parameters);
@@ -111,7 +134,9 @@ while (~EndCond)
 
     rho = sqrt((xg-x)^2+(yg-y)^2);  % pythagoras theorem, sqrt(dx^2 + dy^2)
     EndCond = (rho < parameters.dist_threshold && dtheta < parameters.angle_threshold);     
-    
+    if key == ' '
+      EndCond = 1;
+    end
     % SET ROBOT WHEEL SPEEDS.
     Pioneer_p3dx_setWheelSpeeds(connection, LeftWheelVelocity, RightWheelVelocity);
 end

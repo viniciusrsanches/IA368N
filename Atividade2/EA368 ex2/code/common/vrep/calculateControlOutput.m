@@ -24,8 +24,25 @@ alpha = normalizeAngle(alpha);
 % parameters.backwardAllowed: This boolean variable should switch the between the two controllers
 % parameters.useConstantSpeed: Turn on constant speed option
 % parameters.constantSpeed: The speed used when constant speed option is on
-
-vu = parameters.Krho* rho*cos(alpha); % [m/s]
-omega = parameters.Kalpha*alpha + parameters.Kbeta * (normalizeAngle((-(theta)-alpha)+thetag));% [rad/s]
+if alpha > -pi/2 && alpha < pi/2 
+  if normalizeAngle(theta-thetag) <= pi/2
+    ahead = 1;
+  else
+    ahead = 0;
+  end
+else
+  if normalizeAngle(theta-thetag) <= pi/2
+    ahead = 0;
+  else
+    ahead = 1;
+  end
+end
+%ahead = 0;
+if ahead == 1
+vu = 0.300;%parameters.Krho* rho*cos(alpha); % [m/s]
+omega = parameters.Kalpha*alpha + parameters.Kbeta * (normalizeAngle(normalizeAngle(-lambda)+thetag));% [rad/s]
+else
+vu = -0.300;%parameters.Krho* rho*cos(normalizeAngle(alpha+pi)); % [m/s]
+omega = parameters.Kalpha*normalizeAngle(alpha+pi) + parameters.Kbeta * (normalizeAngle(normalizeAngle(-lambda+pi)+thetag));% [rad/s]
 end
 

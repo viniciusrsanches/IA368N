@@ -29,29 +29,41 @@ alpha = normalizeAngle(alpha);
 %  count_aux = 0;
 %endif
 %if count_aux == 0
-if alpha >= -pi/2 && alpha < pi/2 
-  if normalizeAngle(thetag-theta) < pi/2 %&& normalizeAngle(thetag-theta) >= -pi/2
-    ahead = 1;
-  else
-    ahead = 0;
-  end
-else
-  if normalizeAngle(thetag-theta) < pi/2 %&& normalizeAngle(thetag-theta) >= -pi/2
-    ahead = 0;
-  else
-    ahead = 1;
-  end
-end
+%if alpha >= -pi/2 && alpha < pi/2 
+%  if normalizeAngle(-theta-thetag) < pi/2 %&& normalizeAngle(thetag-theta) >= -pi/2
+%    ahead = 1;
+%  else
+%    ahead = 0;
+%  end
+%else
+%  if normalizeAngle(theta-thetag) < pi/2 %&& normalizeAngle(thetag-theta) >= -pi/2
+%    ahead = 0;
+%  else
+%    ahead = 1;
+%  end
+%end
 %count_aux += 1;
 %endif
 %count_aux += 1;
 
 %ahead = 0;
-if ahead == 1
-vu = 0.100;%parameters.Krho* rho*cos(alpha); % [m/s]
-omega = parameters.Kalpha*alpha + parameters.Kbeta * (normalizeAngle(normalizeAngle(-lambda)+thetag));% [rad/s]
+%if ahead == 1
+if parameters.useConstantSpeed == true
+  vu = parameters.constantSpeed;
 else
-vu = -0.100;%parameters.Krho* rho*cos(normalizeAngle(alpha+pi)); % [m/s]
-omega = parameters.Kalpha*normalizeAngle(alpha+pi) + parameters.Kbeta * (normalizeAngle(normalizeAngle(-lambda+pi)+thetag));% [rad/s]
+  vu = parameters.Krho* rho*cos(alpha); % [m/s]
 end
-
+omega = (parameters.Kalpha*alpha + parameters.Kbeta * (normalizeAngle(normalizeAngle(-lambda)+thetag)));% [rad/s]
+%else
+%vu = -0.300;%parameters.Krho* rho*cos(normalizeAngle(alpha+pi)); % [m/s]
+%omega = parameters.Kalpha*normalizeAngle(alpha+pi) + parameters.Kbeta * (normalizeAngle(normalizeAngle(-lambda+pi)+thetag));% [rad/s]
+%end
+if (alpha < -pi/2 || alpha > pi/2) && (parameters.backwardAllowed == true)
+  vu = -vu;
+  m = [cos(alpha) 0; -sin(alpha)/rho 1; sin(alpha)/rho 0];
+  vels = m * [vu omega]';
+  %printf("Negative vu: %d",vu);
+  omega = vels(2)-vels(3);
+  %printf("Turning around omega: %d",omega);
+  %fflush(stdout);
+end

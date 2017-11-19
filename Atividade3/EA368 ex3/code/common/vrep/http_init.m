@@ -10,8 +10,11 @@
 
 function result = http_init(sessid)
 
-   addpath('C:\Users\eric\Dropbox\UNICAMP\cours\IA368N Introdução a robotica movel\API_MATLAB\jsonlab');
-   addpath('C:\Users\eric\Dropbox\UNICAMP\cours\IA368N Introdução a robotica movel\API_MATLAB\robot');
+   %addpath('C:\Users\eric\Dropbox\UNICAMP\cours\IA368N Introdução a robotica movel\API_MATLAB\jsonlab');
+   %addpath('C:\Users\eric\Dropbox\UNICAMP\cours\IA368N Introdução a robotica movel\API_MATLAB\robot');
+   addpath('~/Desktop/APIs/Matlab/jsonlab');
+   addpath('~/Desktop/APIs/Matlab/robot');
+   javaaddpath('~/Desktop/APIs/Matlab');
    
    % Melhor adicionar ao static path do Matlab 
    % Instruï¿½ï¿½es: file:///Applications/MATLAB_R2013a.app/help/matlab/matlab_external/bringing-java-classes-and-methods-into-matlab-workspace.html#f111065

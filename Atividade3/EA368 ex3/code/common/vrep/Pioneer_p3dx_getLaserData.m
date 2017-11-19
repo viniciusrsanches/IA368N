@@ -111,6 +111,18 @@ function [laserDataX laserDataY] = Pioneer_p3dx_getLaserData(connection, dataTyp
             simFormat()
         else
             %get from restthru
+            if strcmp(dataType,'local_poses')
+                laserData = http_get([connection laserStr laserIndex '/local_poses' optionStr]);
+
+                %'local_poses'
+            elseif strcmp(dataType,'global_poses')
+                %'global_poses'
+            elseif strcmp(dataType,'distances')
+                %'distances'
+                laserData = http_get([connection laserStr laserIndex '/distances' optionStr]);
+            else
+                %'error!'   
+            end  
             realFormat();
         end
     end

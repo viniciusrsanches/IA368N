@@ -14,17 +14,36 @@ function [alpha, r] = fitLine(XY)
 % XY(1,:) contains x position of the points
 % XY(2,:) contains y position of the points
 
+N = max(size(XY));
 
-    xc = ###
-    yc = ###
+x_aux = 0;
+for i=1:N
+  x_aux += XY(1,i);
+end
+xc = x_aux / N;
+
+y_aux = 0;
+for i=1:N
+  y_aux += XY(2,i);
+end    
+yc = y_aux/N;
+  
 
     % compute parameter alpha (see exercise pages)
-    nom   = ###
-    denom = ###
-    alpha = ###
+    sum_nom = 0;
+    for i=1:N
+      sum_nom += ((XY(1,i)-xc)*(XY(2,i) - yc));
+    end
+    nom   = -2* sum_nom;
+    sum_denom = 0;
+    for i=1:N
+      sum_denom += ((XY(2,i)-yc)^2 - (XY(1,i)-xc)^2);
+    end
+    denom = sum_denom;
+    alpha = atan2(nom,denom)/2;
 
     % compute parameter r (see exercise pages)
-    r = ###
+    r = xc*cos(alpha)+yc*sin(alpha);
 
 
 % Eliminate negative radii

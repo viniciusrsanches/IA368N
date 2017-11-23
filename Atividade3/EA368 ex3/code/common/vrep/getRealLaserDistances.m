@@ -76,11 +76,11 @@ pause(1)
 
 %% reading laser
 %%%PUT YOUR CODE HERE
-dist = [];
+%dist = [];
 %count = 0;
 %while count < 1000
 %  aux = [];
-%  aux = Pioneer_p3dx_getLaserData(connection,'distances');
+%  aux = Pioneer_p3dx_getLaserData(connection,'local_poses');
 %  %if ~ismember(aux,dist,"rows")
 %    dist = [dist; aux];
 %  %endif
@@ -97,13 +97,14 @@ average = [];
 variance = [];
 precision = [];
 for c=1:colums
-  deviation= [deviation std(dist(:,c))];
-  average = [average mean(dist(:,c))];
-  variance = [variance var(dist(:,c))];
-  precision = [precision ((max(dist(:,c))-min(dist(:,c)))^2/deviation(c))];
-  [H, pValue, W] = swtest(dist(:,c),0.001);
+  deviation= [deviation std(dist(1:100,c))];
+  average = [average mean(dist(1:100,c))];
+  variance = [variance var(dist(1:100,c))];
+  precision = [precision ((max(dist(1:100,c))-min(dist(1:100,c)))^2/deviation(c))];
+  [H, pValue, W] = swtest(dist(1:100,c),0.01);
   if H == 0
-    hist(dist(:,c),50);
+    figure(c);
+    hist(dist(:,c),30);
   end
   printf ("H: %d\n",H);
   printf("pValue: %d\n",pValue);

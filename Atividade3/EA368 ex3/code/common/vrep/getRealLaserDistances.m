@@ -23,10 +23,10 @@ global laserStr;
 laserStr = '/perception/laser/';
 
 global laserIndex;
-laserIndex='1';
+laserIndex='0';
 
 global optionStr;
-optionStr= '?range=-90:90:10'; %  example optionStr= '?range=-90:90:3' or optionStr=''; if no options are required
+optionStr= '?range=-110:110:20'; %  example optionStr= '?range=-90:90:3' or optionStr=''; if no options are required
 
 global poseStr;
 poseStr = '/motion/pose';   
@@ -46,10 +46,10 @@ if realRobot==1
     %http_init('SID_7755');
     http_init();
     % Declaration of variables
-    %connection = 'http://10.1.3.130:4950';  %use this address if you are
+    connection = 'http://10.1.3.130:4950';  %use this address if you are
     %connected locally to the robot in the REALabs wifi network
     %connection = 'http://143.106.148.171:9090/resource/RobotFEEC2';
-    connection = 'http://192.168.0.105:4950';
+    %connection = 'http://192.168.0.105:4950';
     parameters.wheelDiameter = .195;
     parameters.wheelRadius = parameters.wheelDiameter/2.0;
     parameters.interWheelDistance = .381/2;
@@ -75,20 +75,20 @@ pause(1)
 
 
 %% reading laser
-%%%PUT YOUR CODE HERE
-%dist = [];
-%count = 0;
-%while count < 1000
-%  aux = [];
-%  aux = Pioneer_p3dx_getLaserData(connection,'local_poses');
-%  %if ~ismember(aux,dist,"rows")
-%    dist = [dist; aux];
-%  %endif
-%  count ++;
-%  %pause(0.250);
-%endwhile
-
-dist = csvread('./data.txt');
+%%PUT YOUR CODE HERE
+dist = [];
+count = 0;
+while count < 1000
+  aux = [];
+  aux = Pioneer_p3dx_getLaserData(connection,'distances');
+  %if ~ismember(aux,dist,"rows")
+    dist = [dist; aux];
+  %endif
+  count ++;
+  %pause(0.250);
+endwhile
+csvwrite('./data_vinicius.txt',dist);
+%dist = csvread('./data.txt');
 
 rows = size(dist)(1);
 colums = size(dist)(2);

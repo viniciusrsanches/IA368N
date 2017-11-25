@@ -6,9 +6,9 @@ function [h, H_x] = measurementFunction(x, m)
 % Map entry and state are defined according to "Introduction to Autonomous Mobile Robots" pp. 337
 
 %STARTRM
-h = #;
+h = [m(1)-x(3); m(2)-(x(1)*cos(m(1))+x(2)*sin(m(1)))];
 
-H_x = #;
+H_x = [0 0 -1; -cos(m(1)) -sin(m(1)) 0];
 
 %ENDRM
 

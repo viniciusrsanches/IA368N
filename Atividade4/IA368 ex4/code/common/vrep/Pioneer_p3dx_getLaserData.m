@@ -13,7 +13,7 @@ function [laserDataX laserDataY] = Pioneer_p3dx_getLaserData(connection, dataTyp
     
     
     if nargin < 2 
-        dataType = 'local_poses'
+        dataType = 'local_poses';
     end
     
     

@@ -9,7 +9,7 @@ C_TR = diag([repmat(0.1^2, 1, size(S, 2)) repmat(0.1^2, 1, size(S, 2))]);
 
 
 %STARTRM
-%figure(2), cla, hold on;
+figure(2), cla, hold on;
 
 %compute z_prior
 z_prior=[];
@@ -23,13 +23,13 @@ z_prior = z_prior';
 #
 #
 
-%plot(z(1,:), z(2,:),'bo');
-%plot(z_prior(1,:), z_prior(2,:),'rx');
-%xlabel('angle [rad]'); ylabel('distance [m]')
-%legend('measurement','prior')
-%drawnow
+plot(z(1,:), z(2,:),'bo');
+plot(z_prior(1,:), z_prior(2,:),'rx');
+xlabel('angle [rad]'); ylabel('distance [m]')
+legend('measurement','prior')
+drawnow
 
 % estimate robot pose
-[x_posterori, P_posterori] = filterStep(x, P, u, z_prior, R, M, k, g, l);#; %hint: you just coded this function
+[x_posterori, P_posterori] = filterStep(x, P, u, z, R, M, k, g, l);#; %hint: you just coded this function
 
 %ENDRM

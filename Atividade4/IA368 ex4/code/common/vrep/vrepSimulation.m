@@ -51,6 +51,7 @@ params.MIN_POINTS_PER_SEGMENT = 20;
 
 img = Pioneer_p3dx_getMap(connection);
 M = generateMap(img);
+imshow(img);
 g = sqrt(1);
 l = Pioneer_p3dx_getInterWheelDistance(connection);
 d = Pioneer_p3dx_getWheelDiameter(connection);
@@ -71,9 +72,9 @@ u = [0;0];
 v = [0;0];
 
 
-Pioneer_p3dx_setWheelSpeeds(connection, 0.3, 0.9);
+Pioneer_p3dx_setWheelSpeeds(connection, 0.9, 1.2);
 
-for i = 1:400
+for i = 1:4000
     
     for l = 1:round(laserRate/simStep)
         simulation_triggerStep(connection);

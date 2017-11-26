@@ -19,7 +19,7 @@ if size(Z,2) == 0
     return;
 end
     
-[v, H, R] = associateMeasurements(x, P, Z, R, M, g);
+[v, H, R] = associateMeasurements(x_priori, P_priori, Z, R, M, g);
 
 y = reshape(v, [], 1);
 H = reshape(permute(H, [1,3,2]), [], 3);

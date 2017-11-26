@@ -24,4 +24,4 @@ function [z, R, segends] = extractLinesPolar(theta, rho, C_TR, params)
             [ans, ans, R(:, :, i)] = fitLinePolar(theta(range), rho(range), [ C_TR(range, range),  zeros(nPointsInSegment);  zeros(nPointsInSegment),  C_TR(N + range, N + range)]);
         end
     end
-end
+

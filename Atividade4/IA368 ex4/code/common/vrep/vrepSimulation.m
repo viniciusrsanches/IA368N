@@ -8,6 +8,8 @@
 
 %% Parameters setup
 %% define that we will use the real P3DX and/or the simulated one
+max_recursion_depth(2000);
+pkg load image 
 global realRobot ; 
 realRobot=0;
 
@@ -69,7 +71,7 @@ u = [0;0];
 v = [0;0];
 
 
-Pioneer_p3dx_setWheelSpeeds(connection, 0.9, 1.0);
+Pioneer_p3dx_setWheelSpeeds(connection, 0.3, 0.9);
 
 for i = 1:400
     
@@ -80,19 +82,21 @@ for i = 1:400
     [v(1), v(2)] = Pioneer_p3dx_getWheelSpeeds(connection);
     dt = 50e-3*round(laserRate/simStep);
     u = (v + abs(v).* (k * randn(size(u)))) * dt * d/2;
-    
+    fflush(stdout);
     % extract lines
     [laserX, laserY] = Pioneer_p3dx_getLaserData(connection);
+    fflush(stdout);
     theta = atan2(laserY, laserX);
     rho = laserX./cos(theta);
     inRangeIdx = find(rho < 4.9);
     theta  = theta(inRangeIdx);
     rho  = rho(inRangeIdx);
     
-    [x, P] = incrementalLocalization(x, P, u, [theta; rho], M, params, k, g, l);
+    [x, P] = incrementalLocalization(x, P, u, [theta'; rho'], M, params, k, g, l);
     
     % plot pose estimate in vrep
     Pioneer_p3dx_setGhostPose(connection, x(1), x(2), x(3));
+    fflush(stdout);
     
 end
 simulation_stop(connection);

@@ -7,8 +7,7 @@ Rt = [ 1   0   -2.5
 
 threshold = 0.01;
 minSupport = 20;
-
-mapImage = edge(mapImage,'Canny');
+mapImage = edge(mapImage(:,:,1),'Andy');
 %imshow(mapImage)
 [y, x] = find(mapImage ~= 0);
 p = Rt * [scaling * [x'; y']; ones(size(x'))] ;

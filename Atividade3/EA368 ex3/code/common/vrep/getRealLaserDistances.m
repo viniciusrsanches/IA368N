@@ -71,24 +71,24 @@ else
 
 end
 
-pause(1)
+pause(1);
 
 
 %% reading laser
 %%PUT YOUR CODE HERE
-dist = [];
-count = 0;
-while count < 1000
-  aux = [];
-  aux = Pioneer_p3dx_getLaserData(connection,'distances');
-  %if ~ismember(aux,dist,"rows")
-    dist = [dist; aux];
-  %endif
-  count ++;
-  %pause(0.250);
-endwhile
-csvwrite('./data_vinicius.txt',dist);
-%dist = csvread('./data.txt');
+%dist = [];
+%count = 0;
+%while count < 1000
+%  aux = [];
+%  aux = Pioneer_p3dx_getLaserData(connection,'distances');
+%  %if ~ismember(aux,dist,"rows")
+%    dist = [dist; aux];
+%  %endif
+%  count ++;
+%  %pause(0.250);
+%endwhile
+%csvwrite('./data_vinicius.txt',dist);
+dist = csvread('./data_vinicius.txt');
 
 rows = size(dist)(1);
 colums = size(dist)(2);
@@ -96,24 +96,50 @@ deviation = [];
 average = [];
 variance = [];
 precision = [];
+figure(1);
 for c=1:colums
-  deviation= [deviation std(dist(1:100,c))];
-  average = [average mean(dist(1:100,c))];
-  variance = [variance var(dist(1:100,c))];
-  precision = [precision ((max(dist(1:100,c))-min(dist(1:100,c)))^2/deviation(c))];
-  [H, pValue, W] = swtest(dist(1:100,c),0.01);
-  if H == 0
-    figure(c);
-    hist(dist(:,c),30);
-  end
-  printf ("H: %d\n",H);
-  printf("pValue: %d\n",pValue);
-  printf("W: %d\n",W);
-  fflush(stdout);
+  deviation= [deviation std(dist(1:rows,c))];
+  average = [average mean(dist(1:rows,c))];
+  variance = [variance var(dist(1:rows,c))];
+  precision = [precision average(c)/((max(dist(1:rows,c))-min(dist(1:rows,c)))+average(c))];
+  
+  subplot(3,4,c);
+  hist(dist(:,c),30);
+
+
 endfor
+printf("Std dev: %f\n",deviation);
+printf("Media: %f\n",average);
+printf("Variancia: %f\n",variance);
+printf("Precisao: %f\n",precision);
+fflush(stdout);
 
+alpha_global = 1;
+step = -0.0005;
+printf("Relatório de teste de normalidade dos dados.\n");
+for c=1:colums
+    printf("Feixe de laser: %d\n", c);
+    aux = 1;
+    for alpha=0.95:step:0.0005
+        printf("Alpha: %f\n",alpha);
+        [H, pValue, W] = swtest(dist(1:20,c),alpha);
+        if H == 1 && aux > alpha
+            aux = alpha;
+        end
+        printf ("H: %d\n",H);
+        printf("pValue: %d\n",pValue);
+        printf("W: %d\n",W);
+        fflush(stdout);
+    end
+    if H == 0 
+        aux+=step;
+    end
+if alpha_global > aux
+    alpha_global = aux;
+end
 
-
+end
+printf("Alpha global : %f",alpha_global);
 if realRobot~= 1
      simulation_stop(connection);
      simulation_closeConnection(connection);

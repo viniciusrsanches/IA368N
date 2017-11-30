@@ -19,9 +19,7 @@ for i=1:nMapEntries
     z_prior = [z_prior; z_i(1) z_i(2)];
 end
 z_prior = z_prior';
-#
-#
-#
+
 
 plot(z(1,:), z(2,:),'bo');
 plot(z_prior(1,:), z_prior(2,:),'rx');

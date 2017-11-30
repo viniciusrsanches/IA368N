@@ -11,7 +11,9 @@ r_BF_inB = [...
 
 
 % determine the foot point Jacobian J_BF_inB=d(r_BF_inB)/dq
-J_BF_inB = jacobian(r_BF_inB, q);
+J_BF_inB = [0,- cos(beta + gamma) - cos(beta),-cos(beta + gamma);...
+            cos(alpha)*(cos(beta + gamma) + cos(beta) + 1), -sin(alpha)*(sin(beta + gamma) + sin(beta)), -sin(beta + gamma)*sin(alpha);...
+            sin(alpha)*(cos(beta + gamma) + cos(beta) + 1),  cos(alpha)*(sin(beta + gamma) + sin(beta)),sin(beta + gamma)*cos(alpha)];
 
 % what generalized velocity dq do you have to apply in a configuration q = [0;60°;-120°]
 % to lift the foot in vertical direction with v = [0;0;-1m/s];

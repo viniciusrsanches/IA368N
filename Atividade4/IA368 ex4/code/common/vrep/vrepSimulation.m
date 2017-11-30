@@ -74,7 +74,7 @@ v = [0;0];
 
 Pioneer_p3dx_setWheelSpeeds(connection, 0.9, 1.3);
 
-for i = 1:4000
+for i = 1:400
     
     for l = 1:round(laserRate/simStep)
         simulation_triggerStep(connection);
